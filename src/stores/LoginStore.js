@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events'
 import Dispatcher from '../Dispatcher'
+import UserService from '../services/UserService'
 
 class LoginStore extends EventEmitter{
   constructor(){
@@ -43,8 +44,20 @@ class LoginStore extends EventEmitter{
 
   submitLogin(){
     this.validate()
+    if(Object.keys(this.errors).length === 0){
+      UserService.submitLogin(this.fields)
+    }
     this.emit('change')
-    console.log(this.fields)
+  }
+
+  loginFailed(){
+    this.errors['general'] = 'Unable to login, please try again.'
+    this.emit('change')
+  }
+
+  clearFields(){
+    this.fields = {}
+    this.emit('change')
   }
 
   handleActions(action){
@@ -56,6 +69,16 @@ class LoginStore extends EventEmitter{
 
       case("LOGIN_SUBMIT"):{
         this.submitLogin()
+        break
+      }
+
+      case("LOGIN_FAILED"):{
+        this.loginFailed()
+        break
+      }
+
+      case("UPDATE_USER"):{
+        this.clearFields()
         break
       }
       default:{}

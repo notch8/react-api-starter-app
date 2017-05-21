@@ -13,6 +13,13 @@ export function submitRegistration(userAttributes){
   })
 }
 
+export function registrationFail(errors){
+  Dispatcher.dispatch({
+    type: 'REGISTRATION_FAILED',
+    errors: errors
+  })
+}
+
 export function updateLogin(attribute, value){
   Dispatcher.dispatch({
     type: 'UPDATE_LOGIN',
@@ -24,5 +31,24 @@ export function updateLogin(attribute, value){
 export function submitLogin(loginAttributes){
   Dispatcher.dispatch({
     type: 'LOGIN_SUBMIT'
+  })
+}
+
+export function loginFail(){
+  Dispatcher.dispatch({
+    type: 'LOGIN_FAILED'
+  })
+}
+
+export function logout(){
+  Dispatcher.dispatch({
+    type: 'LOGOUT'
+  })
+}
+
+export function updateUser(attributes){
+  Dispatcher.dispatch({
+    type: 'UPDATE_USER',
+    attributes: attributes
   })
 }

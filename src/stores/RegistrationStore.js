@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events'
 import Dispatcher from '../Dispatcher'
+import UserService from '../services/UserService'
 
 class RegistrationStore extends EventEmitter{
   constructor(){
@@ -46,10 +47,24 @@ class RegistrationStore extends EventEmitter{
     this.emit('change')
   }
 
+  clearFields(){
+    this.fields = {}
+    this.emit('change')
+  }
+
   submitRegistration(){
     this.validate()
+    if(Object.keys(this.errors).length === 0){
+      UserService.submitRegistration(this.fields)
+    }
     this.emit('change')
-    console.log(this.fields)
+  }
+
+  handleServerErrors(errors){
+    errors.forEach((error)=>{
+      this.errors[error.path] = error.message
+    })
+    this.emit('change')
   }
 
   handleActions(action){
@@ -62,6 +77,17 @@ class RegistrationStore extends EventEmitter{
         this.submitRegistration()
         break
       }
+
+      case("REGISTRATION_FAILED"):{
+        this.handleServerErrors(action.errors)
+        break
+      }
+
+      case("UPDATE_USER"):{
+        this.clearFields()
+        break
+      }
+
       default:{}
     }
   }

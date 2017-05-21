@@ -4,10 +4,22 @@ import UserStore from '../stores/UserStore'
 class UserDetail extends Component {
   constructor(props){
     super(props)
-    console.log('dsfasfdas')
     this.state={
       user: UserStore.getFields(),
     }
+    this.updateUser = this.updateUser.bind(this)
+  }
+
+  componentWillMount(){
+    UserStore.on('change', this.updateUser)
+  }
+
+  componentWillUnmount(){
+    UserStore.removeListener('change', this.updateUser)
+  }
+
+  updateUser(){
+    this.setState({user: UserStore.getFields()})
   }
 
   render() {
