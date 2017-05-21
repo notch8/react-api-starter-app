@@ -4,6 +4,10 @@ class UserService{
   constructor(){
     this.isSubmitting = false
     this.baseUrl = 'http://localhost:4000'
+    this.headers = {
+      'Content-Type': 'application/json'
+    }
+
   }
 
   submitRegistration(attributes){
@@ -11,9 +15,7 @@ class UserService{
       this.isSubmitting = true
       const params = {
         method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
+        headers: this.headers,
         body: JSON.stringify(attributes)
       }
       fetch(`${this.baseUrl}/users`, params).then((response)=>{
@@ -31,6 +33,8 @@ class UserService{
             registrationFailure(error.message, mappedErrors)
           })
         }
+      }).catch(()=>{
+        this.isSubmitting = false
       })
     }
   }  
@@ -38,27 +42,25 @@ class UserService{
   submitLogin(attributes){
     if(this.isSubmitting === false){
       this.isSubmitting = true
-      //Stubbed
-      setTimeout(()=>{
-        updateUser({
-          firstName: 'Bob',
-          lastName: 'Bobber',
-          email: 'bob@bobber.com',
-          authToken: '111-222-333-444'
-        })
+      const params = {
+        method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify(attributes)
+      }
+      fetch(`${this.baseUrl}/login`, params).then((response)=>{
         this.isSubmitting = false
-      }, 1000)
-    }
-  } 
-
-  submitBadLogin(){
-    if(this.isSubmitting === false){
-      this.isSubmitting = true
-      //Stubbed
-      setTimeout(()=>{
-        loginFailure("Invalid credentials")
+        if(response.ok){
+          response.json().then((attributes)=>{
+            updateUser(attributes.user)
+          })
+        }else{
+          response.json().then((error)=>{
+            loginFailure(error.message)
+          })
+        }
+      }).catch(()=>{
         this.isSubmitting = false
-      }, 1000)
+      })
     }
   } 
 }
