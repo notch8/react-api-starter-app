@@ -16,9 +16,18 @@ export default class Header extends Component {
               </Link>
             </div>
             <div className='navbar-right navbar-text'>
-              <Link to='/login'>
-                Login
-              </Link>
+              {!this.props.loggedIn &&
+                <Link to='/login'>
+                  Login
+                </Link>
+              }
+              {this.props.loggedIn &&
+                <a 
+                  href="#"
+                  onClick={this.props.logout} >
+                  Logout
+                </a>
+              }
             </div>
           </div>
         </nav>

@@ -26,3 +26,23 @@ export function submitLogin(loginAttributes){
     type: 'LOGIN_SUBMIT'
   })
 }
+
+export function updateUser(attributes){
+  Dispatcher.dispatch({
+    type: 'UPDATE_USER',
+    attributes: attributes 
+  })
+}
+
+export function loginFailure(message){
+  Dispatcher.dispatch({
+    type: 'LOGIN_FAILURE',
+    message: message
+  })
+}
+
+export function logout(){
+  Dispatcher.dispatch({
+    type: 'LOGOUT'
+  })
+}

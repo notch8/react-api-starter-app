@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import FormInput from '../components/FormInput'
 import LoginStore from '../stores/LoginStore'
+
 import {updateLogin, submitLogin} from '../actions/UserActions'
 
 class Login extends Component {
