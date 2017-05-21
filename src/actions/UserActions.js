@@ -13,6 +13,14 @@ export function submitRegistration(userAttributes){
   })
 }
 
+export function registrationFailure(message, errors){
+  Dispatcher.dispatch({
+    type: 'REGISTRATION_FAILURE',
+    message: message,
+    errors: errors
+  })
+}
+
 export function updateLogin(attribute, value){
   Dispatcher.dispatch({
     type: 'UPDATE_LOGIN',

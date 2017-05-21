@@ -55,6 +55,11 @@ class RegistrationStore extends EventEmitter{
     this.emit('change')
   }
 
+  handleServerError(message, errors){
+    this.errors = errors
+    this.emit('change')
+  }
+
   clearFields(){
     this.errors = {}
     this.fields = {}
@@ -69,6 +74,11 @@ class RegistrationStore extends EventEmitter{
       }
       case("REGISTRATION_SUBMIT"):{
         this.submitRegistration()
+        break
+      }
+
+      case("REGISTRATION_FAILURE"):{
+        this.handleServerError(action.message, action.errors)
         break
       }
 

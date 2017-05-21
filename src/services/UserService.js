@@ -1,23 +1,37 @@
-import {updateUser, loginFailure} from '../actions/UserActions'
+import {updateUser, loginFailure, registrationFailure} from '../actions/UserActions'
 
 class UserService{
   constructor(){
     this.isSubmitting = false
+    this.baseUrl = 'http://localhost:4000'
   }
 
   submitRegistration(attributes){
     if(this.isSubmitting === false){
       this.isSubmitting = true
-      //Stubbed
-      setTimeout(()=>{
-        updateUser({
-          firstName: 'Bob',
-          lastName: 'Bobber',
-          email: 'bob@bobber.com',
-          authToken: '111-222-333-444'
-        })
+      const params = {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(attributes)
+      }
+      fetch(`${this.baseUrl}/users`, params).then((response)=>{
         this.isSubmitting = false
-      }, 1000)
+        if(response.ok){
+          response.json().then((attributes)=>{
+            updateUser(attributes.user)
+          })
+        }else{
+          response.json().then((error)=>{
+            const mappedErrors = {}
+            error.errors.forEach((error)=>{
+              mappedErrors[error.path] = error.message
+            })
+            registrationFailure(error.message, mappedErrors)
+          })
+        }
+      })
     }
   }  
 
